@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOMClient from "react-dom/client";
+import ReactDOMClient from "react-dom";
 import MyApp from "./MyApp";
 import "./index.css";
 

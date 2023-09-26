@@ -32,8 +32,8 @@ function Form() {
             <label htmlFor="job">Job</label>
             <input 
                 type = "text"
-                name = "name"
-                id = "name"
+                name = "job"
+                id = "job"
                 value = {person.job}
                 onChange={handleChange} />
         </form>
