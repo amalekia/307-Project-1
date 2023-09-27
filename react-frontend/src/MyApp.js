@@ -13,7 +13,7 @@ function MyApp() {
   }
 
   function updateList(person) {
-    setCharacters([characters, person]);
+    setCharacters([...characters, person]);
   }
 
     return (
