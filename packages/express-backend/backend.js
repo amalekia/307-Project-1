@@ -48,6 +48,11 @@ const addUser = (user) => {
   return user;
 };
 
+// const removeUser = (id) => {
+//   let user = users["users_list"].find((user) => user["id"] === id);
+//   delete(user);
+// }
+
 //GET endpoints
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -79,6 +84,19 @@ app.post("/users", (req, res) => {
   addUser(userToAdd);
   res.send();
 });
+
+app.delete("/users/:id", (req, res) => {
+  const { id } = req.params;
+  remove(id)
+  .then(removed => {
+    if (removed) {
+      res.status(204).end();
+    } 
+    else {
+      res.status(404).send("Not found");
+    }
+  })
+})
 
 //running the server
 app.listen(port, () => {
