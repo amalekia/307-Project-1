@@ -48,10 +48,15 @@ const addUser = (user) => {
   return user;
 };
 
-// const removeUser = (id) => {
-//   let user = users["users_list"].find((user) => user["id"] === id);
-//   delete(user);
-// }
+const removeUser = (id) => {
+  let user = users["users_list"].findIndex((user) => user["id"] === id);
+  if (user == -1){
+    res.status(404).send("User not found");
+  }
+  else{
+    users["users_list"].splice(user, 1);
+  }
+}
 
 //GET endpoints
 app.get("/", (req, res) => {
@@ -86,16 +91,9 @@ app.post("/users", (req, res) => {
 });
 
 app.delete("/users/:id", (req, res) => {
-  const { id } = req.params;
-  remove(id)
-  .then(removed => {
-    if (removed) {
-      res.status(204).end();
-    } 
-    else {
-      res.status(404).send("Not found");
-    }
-  })
+  const id = req.params["id"];
+  removeUser(id);
+  res.send("Successfuly removed user")
 })
 
 //running the server
