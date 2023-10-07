@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
@@ -32,6 +33,8 @@ const users = {
     },
   ],
 };
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -78,7 +81,7 @@ app.get("/users", (req, res) => {
       res.send(finalres);
     }
     else {
-      res.send(result)
+      res.send(result);
     }
   } 
   else {
@@ -96,13 +99,14 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
-
+//POST endpoints
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
   res.send();
 });
 
+//DELETE endpoint
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   removeUser(id);
