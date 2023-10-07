@@ -40,6 +40,10 @@ const findUserByName = (name) => {
   return users["users_list"].filter((user) => user["name"] === name);
 };
 
+const findUserByJob = (job, users) => {
+  return users.filter((user) => user["job"] === job);
+};
+
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
@@ -53,7 +57,7 @@ const removeUser = (id) => {
   if (user == -1){
     res.status(404).send("User not found");
   }
-  else{
+  else {
     users["users_list"].splice(user, 1);
   }
 }
@@ -65,11 +69,19 @@ app.get("/", (req, res) => {
 
 app.get("/users", (req, res) => {
   const name = req.query.name;
+  const job = req.query.job;
   if (name != undefined) {
     let result = findUserByName(name);
     result = { users_list: result };
-    res.send(result);
-  } else {
+    if (job != undefined){
+      let finalres = findUserByJob(job, result);
+      res.send(finalres);
+    }
+    else {
+      res.send(result)
+    }
+  } 
+  else {
     res.send(users);
   }
 });
@@ -84,6 +96,7 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
+
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   addUser(userToAdd);
@@ -93,10 +106,11 @@ app.post("/users", (req, res) => {
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   removeUser(id);
-  res.send("Successfuly removed user")
+  res.status(200).send("Successfuly removed user");
 })
 
 //running the server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
+
