@@ -57,13 +57,12 @@ const addUser = (user) => {
 
 const removeUser = (id) => {
   let user = users["users_list"].findIndex((user) => user["id"] === id);
-  if (user == -1){
+  if (user == -1) {
     res.status(404).send("User not found");
-  }
-  else {
+  } else {
     users["users_list"].splice(user, 1);
   }
-}
+};
 
 //GET endpoints
 app.get("/", (req, res) => {
@@ -75,16 +74,14 @@ app.get("/users", (req, res) => {
   const job = req.query.job;
   if (name != undefined) {
     let result = findUserByName(name);
-    result = {users_list: result};
-    if (job != undefined){
+    result = { users_list: result };
+    if (job != undefined) {
       let finalres = findUserByJob(job, result);
       res.send(finalres);
-    }
-    else {
+    } else {
       res.send(result);
     }
-  } 
-  else {
+  } else {
     res.send(users);
   }
 });
@@ -111,10 +108,9 @@ app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
   removeUser(id);
   res.status(200).send("Successfuly removed user");
-})
+});
 
 //running the server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
-
