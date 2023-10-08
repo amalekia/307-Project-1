@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const port = 8000;
@@ -33,6 +34,7 @@ const users = {
   ],
 };
 
+app.use(cors());
 app.use(express.json());
 
 //helper functions
@@ -47,19 +49,9 @@ const findUserByJob = (job, users) => {
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
-const addUser = (user) => {
-  users["users_list"].push(user);
-  return user;
-};
-
-const removeUser = (id) => {
-  let user = users["users_list"].findIndex((user) => user["id"] === id);
-  if (user == -1){
-    res.status(404).send("User not found");
-  }
-  else {
-    users["users_list"].splice(user, 1);
-  }
+function randomIdGenerator() {
+  const randomID = Math.random().toString().replace(".", "");
+  return randomID;
 }
 
 //GET endpoints
@@ -72,16 +64,15 @@ app.get("/users", (req, res) => {
   const job = req.query.job;
   if (name != undefined) {
     let result = findUserByName(name);
-    result = {users_list: result};
-    if (job != undefined){
+    result = { users_list: result };
+    if (job != undefined) {
       let finalres = findUserByJob(job, result);
+      finalres = { users_list: finalres };
       res.send(finalres);
+    } else {
+      res.send(result);
     }
-    else {
-      res.send(result)
-    }
-  } 
-  else {
+  } else {
     res.send(users);
   }
 });
@@ -96,21 +87,28 @@ app.get("/users/:id", (req, res) => {
   }
 });
 
-
+//POST endpoints
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  addUser(userToAdd);
-  res.send();
+  userToAdd.id = randomIdGenerator();
+  users["users_list"].push(userToAdd);
+  res.status(201).json({ message: "User created successfuly", user: userToAdd });
 });
 
+//DELETE endpoint
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
-  removeUser(id);
-  res.status(200).send("Successfuly removed user");
-})
+  const user = users["users_list"].findIndex((user) => user["id"] === id);
+  if (user !== -1) {
+    users["users_list"].splice(user, 1);
+    res.send("Successfully removed user.");
+  } 
+  else {
+    res.status(404).send("User id not found");
+  }
+});
 
 //running the server
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
-
