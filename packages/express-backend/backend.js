@@ -35,7 +35,6 @@ const users = {
 };
 
 app.use(cors());
-
 app.use(express.json());
 
 //helper functions
@@ -64,6 +63,11 @@ const removeUser = (id) => {
   }
 };
 
+function randomIdGenerator() {
+  const randomID = Math.random().toString().replace(".", "");
+  return randomID;
+}
+
 //GET endpoints
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -77,6 +81,7 @@ app.get("/users", (req, res) => {
     result = { users_list: result };
     if (job != undefined) {
       let finalres = findUserByJob(job, result);
+      finalres = { users_list: finalres };
       res.send(finalres);
     } else {
       res.send(result);
@@ -99,8 +104,9 @@ app.get("/users/:id", (req, res) => {
 //POST endpoints
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
+  userToAdd.id = randomIdGenerator();
   addUser(userToAdd);
-  res.send();
+  res.status(201).json({ message: "User created successfuly", user: userToAdd });
 });
 
 //DELETE endpoint
