@@ -22,10 +22,9 @@ function MyApp() {
   })
     .then((response) => {
       if (response.status === 204) {
-        const updated = characters.filter((character, i) => {
-          return i != index;
-        });
+        const updated = characters.filter((character, i) => { return i != index; });
         setCharacters(updated);
+        console.log("Successfuly deleted user.")
       }
       else if (response.status === 404) {
         console.log("User not found on server.");
@@ -67,7 +66,6 @@ function MyApp() {
       },
       body: JSON.stringify(person),
     });
-
     return promise;
   }
 

@@ -54,15 +54,6 @@ const addUser = (user) => {
   return user;
 };
 
-const removeUser = (id) => {
-  let user = users["users_list"].findIndex((user) => user["id"] === id);
-  if (user == -1) {
-    res.status(404).send("User not found");
-  } else {
-    users["users_list"].splice(user, 1);
-  }
-};
-
 function randomIdGenerator() {
   const randomID = Math.random().toString().replace(".", "");
   return randomID;
@@ -112,8 +103,14 @@ app.post("/users", (req, res) => {
 //DELETE endpoint
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
-  removeUser(id);
-  res.status(200).send("Successfuly removed user");
+  const user = users["users_list"].findIndex((user) => user["id"] === id);
+  if (user !== -1) {
+    users["users_list"].splice(user, 1);
+    res.send("Successfully removed user.");
+  } 
+  else {
+    res.send("User id not found");
+  }
 });
 
 //running the server
