@@ -44,7 +44,7 @@ function MyApp() {
         if (response.status === 201) {
           return response.json();
         } else {
-          throw new Error("Failed to create user");
+          throw new Error("Failed to push user");
         }
       })
       .then(() => setCharacters([...characters, person]))

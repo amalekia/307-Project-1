@@ -49,11 +49,6 @@ const findUserByJob = (job, users) => {
 const findUserById = (id) =>
   users["users_list"].find((user) => user["id"] === id);
 
-const addUser = (user) => {
-  users["users_list"].push(user);
-  return user;
-};
-
 function randomIdGenerator() {
   const randomID = Math.random().toString().replace(".", "");
   return randomID;
@@ -96,7 +91,7 @@ app.get("/users/:id", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   userToAdd.id = randomIdGenerator();
-  addUser(userToAdd);
+  users["users_list"].push(userToAdd);
   res.status(201).json({ message: "User created successfuly", user: userToAdd });
 });
 
