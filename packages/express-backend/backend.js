@@ -92,7 +92,7 @@ app.post("/users", (req, res) => {
   const userToAdd = req.body;
   userToAdd.id = randomIdGenerator();
   users["users_list"].push(userToAdd);
-  res.status(201).json({ message: "User created successfuly", user: userToAdd });
+  res.status(201).json({message : "User created successfuly", user: userToAdd});
 });
 
 //DELETE endpoint
@@ -101,7 +101,7 @@ app.delete("/users/:id", (req, res) => {
   const user = users["users_list"].findIndex((user) => user["id"] === id);
   if (user !== -1) {
     users["users_list"].splice(user, 1);
-    res.send("Successfully removed user.");
+    res.status(204).send("Successfully removed user.");
   } 
   else {
     res.status(404).send("User id not found");

@@ -18,11 +18,11 @@ function MyApp() {
     const userToDelete = characters[index];
 
     fetch(`http://localhost:8000/users/${userToDelete.id}`, {
-    method: 'DELETE',
-  })
+      method: 'DELETE',
+    })
     .then((response) => {
       if (response.status === 204) {
-        const updated = characters.filter((character, i) => { return i != index; });
+        const updated = characters.filter((character, i) => { return i !== index; });
         setCharacters(updated);
         console.log("Successfuly deleted user.")
       }
@@ -30,7 +30,7 @@ function MyApp() {
         console.log("User not found on server.");
       }
       else {
-        console.log("Error removing user:". response.status);
+        console.log("Error removing user:", response.status);
       }
     })
     .catch((error) => {
@@ -47,7 +47,7 @@ function MyApp() {
           throw new Error("Failed to push user");
         }
       })
-      .then(() => setCharacters([...characters, person]))
+      .then((response) => setCharacters([...characters, response.user]))
       .catch((error) => {
         console.log(error);
       });
