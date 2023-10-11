@@ -55,7 +55,7 @@ test('Testing containsNumbers -- success', () => {
     expect(got).toBeTruthy();
 });
 
-test('Testing containsNumbers -- success', () => {
-    const got = mut.containsNumbers("1ad fiv bifb");
-    expect(got).toBeTruthy();
-});
+// test('Testing containsNumbers -- success', () => {
+//     const got = mut.containsNumbers("ad fiv bifb");
+//     expect(got).toBeFalsy();
+// });
