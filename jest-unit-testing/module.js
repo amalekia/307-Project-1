@@ -14,4 +14,4 @@ function div(a,b) {
     return a/b;
 }
 
-export default { sum, div, containsNumbers};
+export default { sum, div, containsNumbers };

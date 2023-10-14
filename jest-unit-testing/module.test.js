@@ -1,4 +1,5 @@
 import mut from './module.js'; // MUT = Module Under Test
+import Portfolio from './portfolio.js'
 
 test('Testing sum -- success', () => {
   const expected = 30;
@@ -54,8 +55,3 @@ test('Testing containsNumbers -- success', () => {
     const got = mut.containsNumbers("1adfivbifb");
     expect(got).toBeTruthy();
 });
-
-// test('Testing containsNumbers -- success', () => {
-//     const got = mut.containsNumbers("ad fiv bifb");
-//     expect(got).toBeFalsy();
-// });
