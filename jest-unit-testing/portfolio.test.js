@@ -66,10 +66,22 @@ test('Testing the if all symbols have shares > 0 -- success', () => {
     expect(res).toBe("pass")
 })
 
-test('Cannot sell more shares than owned -- success', () => {
+test('Cannot sell more shares than owned when using sellStock() -- success', () => {
     const p = new Portfolio();
     p.purchaseStock("KYB", 3);
     p.purchaseStock("FMF", 2);
 
-    expect(p.sellStock("KYB", 4)).toThrow('Not enough shares to sell.')
+    expect(() => {
+        p.sellStock("KYB", 4);
+    }).toThrow('Not enough shares to sell.');
+})
+
+test('Cannot find stock in portfolio when using sellStock() -- success', () => {
+    const p = new Portfolio();
+    p.purchaseStock("KYB", 3);
+    p.purchaseStock("FMF", 2);
+
+    expect(() => {
+        p.sellStock("POOP", 4);
+    }).toThrow('Stock not found in the portfolio.');
 })

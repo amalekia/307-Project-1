@@ -45,11 +45,6 @@ class Portfolio {
     getShares(symbol) {
       return this.collection[symbol] || 0;
     }
-  
-//     // Get a list of all stock symbols in the portfolio
-//     getStockSymbols() {
-//       return Object.keys(this.collection);
-//     }
 
 }
 
