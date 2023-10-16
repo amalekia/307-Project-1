@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cd react-frontend && react-scripts start",
+    "start": "cd packages/react-frontend && react-scripts start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,5 +14,11 @@
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1"
   },
-  "description": ""
+  "description": "",
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
