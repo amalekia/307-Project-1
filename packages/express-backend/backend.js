@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import usermodel from "user-services.js";
 
 const app = express();
 const port = 8000;
@@ -38,16 +39,16 @@ app.use(cors());
 app.use(express.json());
 
 //helper functions
-const findUserByName = (name) => {
-  return users["users_list"].filter((user) => user["name"] === name);
-};
+// const findUserByName = (name) => {
+//   return users["users_list"].filter((user) => user["name"] === name);
+// };
 
-const findUserByJob = (job, users) => {
-  return users["users_list"].filter((user) => user["job"] === job);
-};
+// const findUserByJob = (job, users) => {
+//   return users["users_list"].filter((user) => user["job"] === job);
+// };
 
-const findUserById = (id) =>
-  users["users_list"].find((user) => user["id"] === id);
+// const findUserById = (id) =>
+//   users["users_list"].find((user) => user["id"] === id);
 
 function randomIdGenerator() {
   const randomID = Math.random().toString().replace(".", "");
@@ -63,10 +64,10 @@ app.get("/users", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
   if (name != undefined) {
-    let result = findUserByName(name);
+    let result = usermodel.findUserByName(name);
     result = { users_list: result };
     if (job != undefined) {
-      let finalres = findUserByJob(job, result);
+      let finalres = usermodel.findUserByJob(job, result);
       finalres = { users_list: finalres };
       res.send(finalres);
     } else {
@@ -79,7 +80,7 @@ app.get("/users", (req, res) => {
 
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"];
-  let result = findUserById(id);
+  let result = usermodel.findUserById(id);
   if (result === undefined) {
     res.status(404).send("Resource not found.");
   } else {
@@ -91,8 +92,15 @@ app.get("/users/:id", (req, res) => {
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
   userToAdd.id = randomIdGenerator();
-  users["users_list"].push(userToAdd);
-  res.status(201).json({message : "User created successfuly", user: userToAdd});
+
+  usermodel.addUser(userToAdd)
+  .then(() => {
+    res.status(201).json({message : "User created successfuly", user: userToAdd});
+      console.log("User creation unsuccessful");
+  })
+  .catch((error) => {
+    console.log("User creation unsuccessful");
+  })
 });
 
 //DELETE endpoint
