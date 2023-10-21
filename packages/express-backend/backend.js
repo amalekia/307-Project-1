@@ -5,52 +5,8 @@ import usermodel from "user-services.js";
 const app = express();
 const port = 8000;
 
-const users = {
-  users_list: [
-    {
-      id: "xyz789",
-      name: "Charlie",
-      job: "Janitor",
-    },
-    {
-      id: "abc123",
-      name: "Mac",
-      job: "Bouncer",
-    },
-    {
-      id: "ppp222",
-      name: "Mac",
-      job: "Professor",
-    },
-    {
-      id: "yat999",
-      name: "Dee",
-      job: "Aspring actress",
-    },
-    {
-      id: "zap555",
-      name: "Dennis",
-      job: "Bartender",
-    },
-  ],
-};
-
 app.use(cors());
 app.use(express.json());
-
-//helper functions
-// const findUserByName = (name) => {
-//   return users["users_list"].filter((user) => user["name"] === name);
-// };
-
-// const findUserByJob = (job, users) => {
-//   return users["users_list"].filter((user) => user["job"] === job);
-// };
-
-// const findUserById = (id) =>
-//   users["users_list"].find((user) => user["id"] === id);
-
-//
 
 function randomIdGenerator() {
   const randomID = Math.random().toString().replace(".", "");
@@ -66,10 +22,24 @@ app.get("/users", (req, res) => {
   const name = req.query.name;
   const job = req.query.job;
   if (name != undefined) {
-    let result = usermodel.findUserByName(name);
+    let result = usermodel.findUserByName(name)
+      .then(() => {
+        res.status(201).send("User created successfuly");
+        console.log("User found by ID");
+      })
+      .catch((error) => {
+        console.log("Unable to find user by ID");
+      });
     result = { users_list: result };
     if (job != undefined) {
-      let finalres = usermodel.findUserByJob(job, result);
+      let finalres = usermodel.findUserByJob(job, result)
+        .then(() => {
+          res.status(201).send("User created successfuly");
+          console.log("User found by ID");
+        })
+        .catch((error) => {
+          console.log("Unable to find user by ID");
+        });
       finalres = { users_list: finalres };
       res.send(finalres);
     } else {
@@ -82,7 +52,14 @@ app.get("/users", (req, res) => {
 
 app.get("/users/:id", (req, res) => {
   const id = req.params["id"];
-  let result = usermodel.findUserById(id);
+  let result = usermodel.findUserById(id)
+    .then(() => {
+      res.status(201).send("User created successfuly");
+      console.log("User found by ID");
+    })
+    .catch((error) => {
+      console.log("Unable to find user by ID");
+    });
   if (result === undefined) {
     res.status(404).send("Resource not found.");
   } else {
@@ -98,17 +75,23 @@ app.post("/users", (req, res) => {
   usermodel.addUser(userToAdd)
   .then(() => {
     res.status(201).json({message : "User created successfuly", user: userToAdd});
-      console.log("User creation unsuccessful");
+    console.log("User creation unsuccessful");
   })
   .catch((error) => {
     console.log("User creation unsuccessful");
-  })
+  });
 });
 
 //DELETE endpoint
 app.delete("/users/:id", (req, res) => {
   const id = req.params["id"];
-  const user = users["users_list"].findIndex((user) => user["id"] === id);
+  const user = usermodel.findUserById(id)
+    .then(() => {
+      res.status(201).send("User found successfuly");
+      })
+      .catch((error) => {
+        console.log("Could not find user by ID");
+      });
   if (user !== -1) {
     users["users_list"].splice(user, 1);
     res.status(204).send("Successfully removed user.");
