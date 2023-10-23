@@ -4,7 +4,7 @@ import userModel from "./user.js";
 mongoose.set("debug", true);
 
 mongoose
-  .connect("mongodb://localhost:27017/users", {
+  .connect("mongodb://0.0.0.0:27017/users", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -39,6 +39,9 @@ function findUserByName(name) {
 function findUserByJob(job) {
   return userModel.find({ job: job });
 }
+function userDelete(id) {
+  return userModel.findByIdAndDelete(id);
+}
 
 export default {
   addUser,
@@ -46,4 +49,5 @@ export default {
   findUserById,
   findUserByName,
   findUserByJob,
+  userDelete,
 };
